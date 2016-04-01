@@ -1,0 +1,21 @@
+<%= form_for(@my_object) do |f| %>
+  <% if @my_object.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@my_object.errors.count, "error") %> prohibited this my_object from being saved:</h2>
+
+      <ul>
+      <% @my_object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :color %><br>
+    <%= f.select :color, ['red', 'green','blue']%>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
