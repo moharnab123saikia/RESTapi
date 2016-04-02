@@ -42,7 +42,7 @@ class MyObjectsController < ApplicationController
   def update
     respond_to do |format|
       if @my_object.update(my_object_params)
-        format.html { redirect_to @my_object, notice: 'My object was successfully updated.' }
+        format.html { redirect_to my_objects_url, notice: 'My object was successfully updated.' }
         format.json { render :show, status: :ok, location: @my_object }
       else
         format.html { render :edit }

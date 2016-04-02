@@ -1,4 +1,6 @@
 class Api::MyObjectsController < ApplicationController
+	#http_basic_authenticate_with :name => "platform9", :password => "abcd123"
+  #skip_before_filter :authenticate_user!
 	skip_before_filter :verify_authenticity_token
 	before_action :set_my_object, only: [:show, :edit, :update, :destroy]
 	def index
@@ -26,16 +28,14 @@ class Api::MyObjectsController < ApplicationController
     @my_object = MyObject.new(my_object_params)
 
       if @my_object.save
-      	render json:{
-      		status: 200,
+      	render status: :created, json:{
       		message: "My object was successfully created.",
       		my_object: @my_object
       	}.to_json
         # format.html { redirect_to @my_object, notice: 'My object was successfully created.' }
         # format.json { render :show, status: :created, location: @my_object }
       else
-      	render json:{
-      		status: 500,
+      	render status: :unprocessable_entity, json:{
       		errors: @my_object.errors
       	}.to_json
         # format.html { render :new }
@@ -46,23 +46,38 @@ class Api::MyObjectsController < ApplicationController
   # PATCH/PUT /my_objects/1
   # PATCH/PUT /my_objects/1.json
   def update
-    respond_to do |format|
+     respond_to do |format|
+
       if @my_object.update(my_object_params)
-        format.html { redirect_to @my_object, notice: 'My object was successfully updated.' }
-        format.json { render :show, status: :ok, location: @my_object }
+        format.json { head :no_content, status: :ok }
+        format.xml { head :no_content, status: :ok }
       else
-        format.html { render :edit }
         format.json { render json: @my_object.errors, status: :unprocessable_entity }
+        format.xml { render xml: @my_object.errors, status: :unprocessable_entity }
       end
-    end
+      # if @my_object.update(my_object_params)
+      # 	render status: :ok, json:{
+      # 		message: "My object was successfully updated.",
+      # 		my_object: @my_object
+      # 	}.to_json
+        # format.html { redirect_to @my_object, notice: 'My object was successfully updated.' }
+        # format.json { render :show, status: :ok, location: @my_object }
+      # else
+      # 	render status: :unprocessable_entity, json:{
+      # 		message: "My object was could not be updated.",
+      # 		my_object: @my_object
+      # 	}.to_json
+        # format.html { render :edit }
+        # format.json { render json: @my_object.errors, status: :unprocessable_entity }
+      # end
+     end
   end
 
   # DELETE /my_objects/1
   # DELETE /my_objects/1.json
   def destroy
     @my_object.destroy
-    render json:{
-      		status: 200,
+    render status: :ok, json:{
       		message: 'My object was successfully destroyed.'
       	}.to_json
     # respond_to do |format|
